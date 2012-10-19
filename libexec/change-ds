@@ -1,0 +1,61 @@
+#!/usr/bin/ruby
+
+require File.join(File.dirname(__FILE__), "../share/change/helpers")
+
+# options
+force = ARGV.delete("-f")
+# observations
+initial_branch = current_branch
+
+begin
+
+  # Preflight.
+
+  unless head_is_clean
+    raise DirtyHeadError.new
+  end
+
+  # Fetch.
+
+  run_or_raise("git fetch")
+
+  # Checkout and pull the STAGING branch.
+
+  unless on_branch("staging")
+    run_or_raise("git checkout staging")
+  end
+
+  if has_branch("remotes/origin/staging")
+    run_or_raise("git merge origin/staging")
+  end
+
+  # Checkout & pull the MASTER branch.
+
+  run_or_raise("git checkout master")
+  run_or_raise("git merge origin/master")
+
+  # Delete the STAGING branch.
+
+  if has_branch("remotes/origin/staging")
+    run_or_raise("git push --delete origin staging")
+  end
+
+  if force
+    run_or_raise("git branch -D staging")
+  else
+    run_or_raise("git branch -d staging")
+  end
+
+  # Finish.
+
+  if has_branch(initial_branch)
+    run_or_raise("git checkout #{initial_branch}")
+  end
+
+  put_success("The staging branch has been deleted.")
+
+rescue Exception => error
+
+  handle_error(error)
+
+end

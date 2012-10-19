@@ -1,0 +1,43 @@
+#!/usr/bin/ruby
+
+require File.join(File.dirname(__FILE__), "../share/change/helpers")
+
+# arguments
+name = ARGV.shift
+
+begin
+
+  # Preflight.
+
+  if name.to_s.strip.empty?
+    raise ArgumentError.new("You must pass the name of the change to start:\n  change start <name>")
+  else
+    change_branch = "change/#{name}"
+  end
+
+  unless head_is_clean
+    raise DirtyHeadError.new
+  end
+
+  # Fetch.
+
+  run_or_raise("git fetch")
+
+  # Pull the MASTER branch.
+
+  run_or_raise("git checkout master") unless on_branch("master")
+  run_or_raise("git merge origin/master")
+
+  # Create the CHANGE branch.
+
+  run_or_raise("git checkout -b #{change_branch}")
+
+  # Finish.
+
+  put_success("Your change has been started.")
+
+rescue Exception => error
+
+  handle_error(error)
+
+end
