@@ -48,14 +48,14 @@ begin
 
   # Delete the CHANGE branch.
 
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git push --delete origin #{change_branch}")
+  end
+
   if force
     run_or_raise("git branch -D #{change_branch}")
   else
     run_or_raise("git branch -d #{change_branch}")
-  end
-
-  if has_branch("remotes/origin/#{change_branch}")
-    run_or_raise("git push --delete origin #{change_branch}")
   end
 
   # Finish.
