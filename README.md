@@ -16,8 +16,9 @@ Change expects you to abide by these rules:
 
 - _NEVER_ commit to the **master** branch.
 - _NEVER_ commit to the **staging** branch _EXCEPT_ to resolve merge conflicts.
-- All work _MUST_ be done in a **change/*** branch.
-- Every change _MUST_ go via a GitHub pull request.
+- _NEVER_ merge the the **staging** branch into another branch.
+- Every change _MUST_ be done on a **change/*** branch.
+- Every change _MUST_ be merged into the **master** via a GitHub pull request.
 - Every change _MUST_ be staged & reviewed before being merged into the **master** branch.
 
 Installing
