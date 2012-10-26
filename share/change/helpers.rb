@@ -43,11 +43,11 @@ def head_is_clean
 end
 
 def on_branch(branch)
-  `git branch --no-color` =~ /^\s*\*\s*#{branch}\s*$/
+  `git branch --no-color` =~ /^\s*\*\s*#{Regexp.escape(branch)}\s*$/
 end
 
 def has_branch(branch)
-  `git branch -a --no-color` =~ /^[\*\s]*#{branch}\s*$/
+  `git branch -a --no-color` =~ /^[\*\s]*#{Regexp.escape(branch)}\s*$/
 end
 
 def current_branch
