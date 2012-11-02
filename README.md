@@ -34,7 +34,7 @@ brew install change
 Workflow
 --------
 
-1.  Start a change.
+1.  Start a change called "fix-typos".
 
     ```bash
     $ change start fix-typos
@@ -48,7 +48,7 @@ Workflow
     $ git commit -m "example commit"
     ```
 
-3.  Add the change to staging & deploy to the staging server.
+3.  Add the change to the staging branch & deploy it to the staging server.
 
     ```bash
     $ change stage fix-typos
