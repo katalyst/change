@@ -1,0 +1,70 @@
+#!/usr/bin/ruby
+
+require File.join(File.dirname(__FILE__), "../share/change/helpers")
+
+# options
+skip_fetch = ARGV.delete("--skip-fetch")
+return_branch = extract_string_option(ARGV, "--return-branch")
+# arguments
+name = ARGV.shift
+# observations
+initial_branch = current_branch
+
+begin
+
+  # Preflight.
+
+  if name.to_s.strip.empty?
+    if current_branch.start_with?("change/")
+      change_branch = current_branch
+      name = name_from_branch(change_branch)
+    else
+      raise ArgumentError.new("You must either be on the change branch or pass the name of the change to publish:\n  change start <name>")
+    end
+  else
+    change_branch = "change/#{name}"
+  end
+
+  unless head_is_clean
+    raise DirtyHeadError.new
+  end
+
+  # Fetch.
+
+  unless skip_fetch
+    run_or_raise("git fetch")
+  end
+
+  # Checkout & pull the MASTER branch.
+
+  run_or_raise("git checkout master")
+  run_or_raise("git merge origin/master")
+
+  # Checkout & pull the CHANGE branch.
+
+  unless on_branch(change_branch)
+    run_or_raise("git checkout #{change_branch}")
+  end
+
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git merge origin/#{change_branch}")
+  end
+
+  # Merge the branch into the CHANGE branch.
+
+  run_or_raise("git merge master")
+
+  # Finish.
+
+  if return_branch
+    run_or_raise("git checkout #{return_branch}")
+  else
+    run_or_raise("git checkout #{initial_branch}")
+  end
+  put_success("Your change has been added to the staging branch.")
+
+rescue Exception => error
+
+  handle_error(error)
+
+end
