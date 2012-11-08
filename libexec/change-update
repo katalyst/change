@@ -35,42 +35,24 @@ begin
     run_or_raise("git fetch")
   end
 
-  run_or_raise("change publish #{name} --skip-fetch")
-
-  # # Checkout & pull the CHANGE branch.
-  #
-  # unless on_branch(change_branch)
-  #   run_or_raise("git checkout #{change_branch}")
-  # end
-  #
-  # if has_branch("remotes/origin/#{change_branch}")
-  #   run_or_raise("git merge origin/#{change_branch}")
-  # end
-
   # Checkout & pull the MASTER branch.
 
   run_or_raise("git checkout master")
   run_or_raise("git merge origin/master")
 
-  # Check the staging branch exists.
+  # Checkout & pull the CHANGE branch.
 
-  if has_branch("staging")
-    run_or_raise("git checkout staging")
-    if has_branch("remotes/origin/staging")
-      run_or_raise("git merge origin/staging")
-    end
-  else
-    run_or_raise("git checkout -b staging")
+  unless on_branch(change_branch)
+    run_or_raise("git checkout #{change_branch}")
   end
 
-  # Merge the master and change branches into the STAGING branch.
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git merge origin/#{change_branch}")
+  end
+
+  # Merge the branch into the CHANGE branch.
 
   run_or_raise("git merge master")
-  run_or_raise("git merge #{change_branch}")
-
-  # Push the STAGING branch.
-
-  run_or_raise("git push -u origin staging")
 
   # Finish.
 

@@ -2,6 +2,9 @@
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
+# options
+skip_fetch = ARGV.delete("--skip-fetch")
+return_branch = extract_string_option(ARGV, "--return-branch")
 # arguments
 name = ARGV.shift
 # observations
@@ -27,7 +30,9 @@ begin
 
   # Fetch.
 
-  run_or_raise("git fetch")
+  unless skip_fetch
+    run_or_raise("git fetch")
+  end
 
   # Checkout & pull the CHANGE branch.
 
@@ -45,7 +50,11 @@ begin
 
   # Finish.
 
-  run_or_raise("git checkout #{initial_branch}")
+  if return_branch
+    run_or_raise("git checkout #{return_branch}")
+  else
+    run_or_raise("git checkout #{initial_branch}")
+  end
   put_success("Your change has been pushed to the remote.")
 
 rescue Exception => error
