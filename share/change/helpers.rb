@@ -32,6 +32,14 @@ def handle_error(error)
 
 end
 
+def extract_string_option(args, name)
+  while i = args.index(name)
+    args.delete_at(i)
+    out = args.delete_at(i)
+  end
+  out
+end
+
 def put_success(message)
   system("tput setaf 2")
   puts message
@@ -52,4 +60,10 @@ end
 
 def current_branch
   `git branch --no-color`.match(/^\s*\*\s*(.+)\s*$/)[1].strip
+end
+
+def name_from_branch(branch)
+  b = branch.dup
+  b.slice!(/^change\//)
+  b
 end

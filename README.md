@@ -7,7 +7,7 @@ Change enforces a git branch structure like so:
 
 ```bash
 change/abc # work in progress
-change/zyx # etc
+change/zyx # more work in progress
 master # 100% tested and ready to go live
 staging # testing for work in progress
 ```
@@ -18,7 +18,7 @@ Change expects you to abide by these rules:
 - _NEVER_ commit to the **staging** branch _EXCEPT_ to resolve merge conflicts.
 - _NEVER_ merge the the **staging** branch into another branch.
 - Every change _MUST_ be done on a **change/*** branch.
-- Every change _MUST_ be merged into the **master** via a GitHub pull request.
+- Every change _MUST_ be merged into the **master** branch via a GitHub pull request.
 - Every change _MUST_ be staged & reviewed before being merged into the **master** branch.
 
 Installing
@@ -34,13 +34,13 @@ brew install change
 Workflow
 --------
 
-1.  Start a change called "fix-typos".
+1.  Start a change (called "fix-typos" in the example).
 
     ```bash
     $ change start fix-typos
     ```
 
-2.  Do some work and commit it.
+2.  Do some work and commit it to the change branch.
 
     ```bash
     $ touch example
@@ -55,19 +55,13 @@ Workflow
     # deploy the staging branch to the staging server
     ```
 
-4.  Publish the change.
-
-    ```bash
-    $ change publish fix-typos
-    ```
-
-5.  Open a pull request and repeat steps 2, 3 & 4 until the pull request has been approved.
+4.  Open a pull request and repeat steps 2 & 3 until the pull request has been approved.
 
     ```bash
     # open a pull request on github.com
     ```
 
-6.  Merge the pull request into master, delete the change & deploy to production.
+5.  Merge the pull request into master, delete the change & deploy to production.
 
     ```bash
     # merge the pull request on github.com
@@ -77,6 +71,13 @@ Workflow
 
 Reference
 ---------
+
+- [Start](#start)
+- [Publish](#publish)
+- [Stage](#stage)
+- [Update](#update)
+- [Delete](#delete)
+- [Delete Staging](#delete-staging)
 
 ### Start
 
@@ -101,6 +102,14 @@ change stage [<name>]
 ```
 
 The `stage` command merges a change into the master branch before pushing it to the remote. If the staging branch doesn't yet exist it is created in the process.
+
+### Update
+
+```text
+change update [<name>]
+```
+
+The `update` command merges the latest changes from the master branch into the change branch.
 
 ### Delete
 
