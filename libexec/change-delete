@@ -4,6 +4,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
 force = ARGV.delete("-f")
+skip_fetch = ARGV.delete("--skip-fetch")
 # arguments
 name = ARGV.shift
 # observations
@@ -29,7 +30,9 @@ begin
 
   # Fetch.
 
-  run_or_raise("git fetch")
+  unless skip_fetch
+    run_or_raise("git fetch")
+  end
 
   # Checkout & pull the CHANGE branch.
 
