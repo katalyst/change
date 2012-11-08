@@ -32,6 +32,14 @@ def handle_error(error)
 
 end
 
+def extract_string_option(args, name)
+  while i = args.index(name)
+    args.delete_at(i)
+    out = args.delete_at(i)
+  end
+  out
+end
+
 def put_success(message)
   system("tput setaf 2")
   puts message

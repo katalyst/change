@@ -5,6 +5,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 # options
 force = ARGV.delete("-f")
 skip_fetch = ARGV.delete("--skip-fetch")
+return_branch = extract_string_option(ARGV, "--return-branch")
 # arguments
 name = ARGV.shift
 # observations
@@ -63,7 +64,9 @@ begin
 
   # Finish.
 
-  if has_branch(initial_branch)
+  if return_branch
+    run_or_raise("git checkout #{return_branch}")
+  elsif has_branch(initial_branch)
     run_or_raise("git checkout #{initial_branch}")
   end
 
