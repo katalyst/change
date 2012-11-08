@@ -17,6 +17,7 @@ begin
   if name.to_s.strip.empty?
     if current_branch.start_with?("change/")
       change_branch = current_branch
+      name = name_from_branch(change_branch)
     else
       raise ArgumentError.new("You must either be on the change branch or pass the name of the change to publish:\n  change start <name>")
     end
@@ -34,15 +35,17 @@ begin
     run_or_raise("git fetch")
   end
 
-  # Checkout & pull the CHANGE branch.
+  run_or_raise("change publish #{name} --skip-fetch")
 
-  unless on_branch(change_branch)
-    run_or_raise("git checkout #{change_branch}")
-  end
-
-  if has_branch("remotes/origin/#{change_branch}")
-    run_or_raise("git merge origin/#{change_branch}")
-  end
+  # # Checkout & pull the CHANGE branch.
+  #
+  # unless on_branch(change_branch)
+  #   run_or_raise("git checkout #{change_branch}")
+  # end
+  #
+  # if has_branch("remotes/origin/#{change_branch}")
+  #   run_or_raise("git merge origin/#{change_branch}")
+  # end
 
   # Checkout & pull the MASTER branch.
 

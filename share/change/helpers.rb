@@ -61,3 +61,9 @@ end
 def current_branch
   `git branch --no-color`.match(/^\s*\*\s*(.+)\s*$/)[1].strip
 end
+
+def name_from_branch(branch)
+  b = branch.dup
+  b.slice!(/^change\//)
+  b
+end
