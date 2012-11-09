@@ -8,7 +8,7 @@ def run_or_raise(command, error=nil)
 
   system("tput setaf 6")
   puts "$ #{command}"
-  system("tput setaf 7")
+  system("tput sgr0")
 
   unless system(command)
     raise (error || "Unknown error.")
@@ -20,7 +20,7 @@ def handle_error(error)
 
   system("tput setaf 1")
   puts error
-  system("tput setaf 7")
+  system("tput sgr0")
 
   status = case error
     when ArgumentError:   1
@@ -43,7 +43,7 @@ end
 def put_success(message)
   system("tput setaf 2")
   puts message
-  system("tput setaf 7")
+  system("tput sgr0")
 end
 
 def head_is_clean
