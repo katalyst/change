@@ -34,7 +34,7 @@ brew install change
 Workflow
 --------
 
-1.  Start a change (called "fix-typos" in the example).
+1.  Start a change (called "fix-typos" in this example).
 
     ```bash
     $ change start fix-typos
@@ -72,14 +72,15 @@ Workflow
 Reference
 ---------
 
+### Common Commands
+
 - [Start](#start)
-- [Publish](#publish)
 - [Stage](#stage)
 - [Update](#update)
 - [Delete](#delete)
-- [Delete Staging](#delete-staging)
 
-### Start
+
+#### Start
 
 ```text
 change start <name>
@@ -87,15 +88,7 @@ change start <name>
 
 The `start` command pulls thew latest version of the master branch and creates a new change branch off that.
 
-### Publish
-
-```text
-change publish [<name>]
-```
-
-The `publish` command pushes a change branch to the remote (creating it if it doesn't already exist).
-
-### Stage
+#### Stage
 
 ```text
 change stage [<name>]
@@ -103,7 +96,7 @@ change stage [<name>]
 
 The `stage` command merges a change into the master branch before pushing it to the remote. If the staging branch doesn't yet exist it is created in the process.
 
-### Update
+#### Update
 
 ```text
 change update [<name>]
@@ -111,7 +104,7 @@ change update [<name>]
 
 The `update` command merges the latest changes from the master branch into the change branch.
 
-### Delete
+#### Delete
 
 ```text
 change delete [<name>] [-f]
@@ -121,7 +114,21 @@ The `delete` command deletes a change branch locally and on the remote. The `-f`
 
 After using `change delete <name> -f` on a change that has previously been staged, you would normally want run `change ds -f` as the staging branch would be polluted with this abandoned change.
 
-### Delete Staging
+
+### Additional Commands
+
+- [Publish](#publish)
+- [Delete Staging](#delete-staging)
+
+#### Publish
+
+```text
+change publish [<name>]
+```
+
+The `publish` command pushes a change branch to the remote (creating it if it doesn't already exist).
+
+#### Delete Staging
 
 ```text
 change ds [-f]
