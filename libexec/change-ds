@@ -20,7 +20,7 @@ begin
   # Fetch.
 
   unless skip_fetch
-    run_or_raise("git fetch")
+    run_or_raise("git fetch -p")
   end
 
   # Checkout and pull the STAGING branch.
