@@ -12,7 +12,7 @@ begin
   # Preflight.
 
   if name.to_s.strip.empty?
-    raise ArgumentError.new("You must pass the name of the change to start:\n  change start <name>")
+    raise ArgumentError.new("You must pass the name of the change to checkout:\n  change checkout <name>")
   else
     change_branch = "change/#{name}"
   end
@@ -27,18 +27,15 @@ begin
     run_or_raise("git fetch -p")
   end
 
-  # Pull the MASTER branch.
+  # Checkout the branch.
 
-  run_or_raise("git checkout master") unless on_branch("master")
-  run_or_raise("git merge origin/master")
+  run_or_raise("git checkout #{change_branch}")
 
-  # Create the CHANGE branch.
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git merge origin/#{change_branch}")
+  end
 
-  run_or_raise("git checkout -b #{change_branch}")
-
-  # Finish.
-
-  put_success("Your change has been started.")
+  put_success("Done.")
 
 rescue Exception => error
 
