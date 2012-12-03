@@ -13,6 +13,8 @@ begin
 
   if name.to_s.strip.empty?
     raise ArgumentError.new("You must pass the name of the change to checkout:\n  change checkout <name>")
+  else
+    change_branch = "change/#{name}"
   end
 
   unless head_is_clean
@@ -25,13 +27,15 @@ begin
     run_or_raise("git fetch")
   end
 
-  # Checkout & pull the CHANGE branch.
+  # Checkout the branch.
 
-  unless on_branch(change_branch)
-    run_or_raise("git checkout #{change_branch}")
+  run_or_raise("git checkout #{change_branch}")
+
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git merge origin/#{change_branch}")
   end
 
-  put_success("Your change has been pushed to the remote.")
+  put_success("Done.")
 
 rescue Exception => error
 
