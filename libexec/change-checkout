@@ -1,0 +1,40 @@
+#!/usr/bin/ruby
+
+require File.join(File.dirname(__FILE__), "../share/change/helpers")
+
+# options
+skip_fetch = ARGV.delete("--skip-fetch")
+# arguments
+name = ARGV.shift
+
+begin
+
+  # Preflight.
+
+  if name.to_s.strip.empty?
+    raise ArgumentError.new("You must pass the name of the change to checkout:\n  change checkout <name>")
+  end
+
+  unless head_is_clean
+    raise DirtyHeadError.new
+  end
+
+  # Fetch.
+
+  unless skip_fetch
+    run_or_raise("git fetch")
+  end
+
+  # Checkout & pull the CHANGE branch.
+
+  unless on_branch(change_branch)
+    run_or_raise("git checkout #{change_branch}")
+  end
+
+  put_success("Your change has been pushed to the remote.")
+
+rescue Exception => error
+
+  handle_error(error)
+
+end
