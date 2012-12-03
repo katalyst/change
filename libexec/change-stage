@@ -32,7 +32,7 @@ begin
   # Fetch.
 
   unless skip_fetch
-    run_or_raise("git fetch")
+    run_or_raise("git fetch -p")
   end
 
   run_or_raise("change publish #{name} --skip-fetch")
