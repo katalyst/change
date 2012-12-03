@@ -61,7 +61,7 @@ begin
   else
     run_or_raise("git checkout #{initial_branch}")
   end
-  put_success("Your change has been added to the staging branch.")
+  put_success("Your change has been successfully updated.")
 
 rescue Exception => error
 
