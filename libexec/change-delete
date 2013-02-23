@@ -3,6 +3,7 @@
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
+complete = ARGV.delete("--complete")
 force = ARGV.delete("-f")
 skip_fetch = ARGV.delete("--skip-fetch")
 return_branch = extract_string_option(ARGV, "--return-branch")
@@ -10,6 +11,12 @@ return_branch = extract_string_option(ARGV, "--return-branch")
 name = ARGV.shift
 # observations
 initial_branch = current_branch
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
 
 begin
 
