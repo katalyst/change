@@ -1,4 +1,11 @@
 #!/usr/bin/ruby
+# Usage: change update [<change>] [--skip-fetch] [--return-branch]
+# Summary: Merge master into change branch.
+# Help: Pulls the lastest version of master and then merges it into the change
+# branch.
+#
+# If the <change> argument is not passed it is assumed the current change branch
+# is the one to be updated.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 

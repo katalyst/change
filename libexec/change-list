@@ -1,4 +1,8 @@
 #!/usr/bin/ruby
+# Usage: change list
+# Summary: List all the changes (local & on the remote).
+# Help: Displays a list of all the changes avalible by looking at all the local
+# and remote branches prefixed with "change/".
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 

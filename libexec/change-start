@@ -1,4 +1,8 @@
 #!/usr/bin/ruby
+# Usage: change start [<change>] [--skip-fetch]
+# Summary: Create a new change branch.
+# Help: Pull the lastest version of master and then create a new change branch
+# off that.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
