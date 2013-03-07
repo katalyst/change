@@ -3,9 +3,16 @@
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
+complete = ARGV.delete("--complete")
 fetch = ARGV.delete("--fetch")
 # arguments
 name = ARGV.shift
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
 
 begin
 
