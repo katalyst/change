@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 # Usage: change checkout <change> [--fetch]
-# Summary: Checkout & pull a change.
-# Help: Checkout a change branch and do a pull.
+# Summary: Checkout a change branch.
+# Help: Checkout a change branch.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
