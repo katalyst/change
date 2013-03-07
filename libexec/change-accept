@@ -1,0 +1,89 @@
+#!/usr/bin/ruby
+# Usage: change accept [<change>] [--skip-fetch] [--return-branch]
+# Summary: Merge a change into the master branch.
+# Help: Merge a branch into master.
+
+require File.join(File.dirname(__FILE__), "../share/change/helpers")
+
+# options
+complete = ARGV.delete("--complete")
+skip_fetch = ARGV.delete("--skip-fetch")
+return_branch = extract_string_option(ARGV, "--return-branch")
+# arguments
+name = ARGV.shift
+# observations
+initial_branch = current_branch
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
+
+begin
+
+  # Preflight.
+
+  if name.to_s.strip.empty?
+    if current_branch.start_with?("change/")
+      change_branch = current_branch
+    else
+      raise ArgumentError.new("You must either be on the change branch or pass the name of the change to accept:\n  change accept <name>")
+    end
+  else
+    change_branch = "change/#{name}"
+  end
+
+  unless head_is_clean
+    raise DirtyHeadError.new
+  end
+
+  # Fetch.
+
+  unless skip_fetch
+    run_or_raise("git fetch -p")
+  end
+
+  # Checkout & pull the MASTER branch.
+
+  unless on_branch("master")
+    run_or_raise("git checkout master")
+  end
+  run_or_raise("git merge origin/master")
+
+  # Checkout & pull the CHANGE branch.
+
+  run_or_raise("git checkout #{change_branch}")
+
+  if has_branch("remotes/origin/#{change_branch}")
+    run_or_raise("git merge origin/#{change_branch}")
+  end
+
+  # Merge the MASTER branch into the CHANGE branch.
+
+  run_or_raise("git merge master")
+
+  # Merge the CHANGE branch into the MASTER branch.
+
+  run_or_raise("git checkout master")
+  run_or_raise("git merge #{change_branch}")
+
+  # Push the MASTER branch.
+
+  run_or_raise("git push")
+
+  # Finish.
+
+  if return_branch
+    run_or_raise("git checkout #{return_branch}")
+  else
+    run_or_raise("git checkout #{initial_branch}")
+  end
+
+  put_success("The change has been merged into master.")
+
+rescue Exception => error
+
+  handle_error(error)
+
+end
