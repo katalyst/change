@@ -86,6 +86,7 @@ change publish [<change>] [--skip-fetch] [--return-branch <branch>]
 change stage [<change>] [--skip-fetch] [--return-branch <branch>]
 change start <change> [--skip-fetch]
 change update [<change>] [--skip-fetch] [--return-branch <branch>]
+change version
 ```
 
 ### Details
@@ -98,6 +99,7 @@ change update [<change>] [--skip-fetch] [--return-branch <branch>]
 - [Stage](#stage)
 - [Start](#start)
 - [Update](#update)
+- [Version](#version)
 
 #### Checkout
 
@@ -175,6 +177,14 @@ change update [<change>] [--skip-fetch] [--return-branch <branch>]
 ```
 
 The `update` command merges the latest changes from the master branch into the change branch.
+
+#### Version
+
+```text
+change version
+```
+
+The `version` command prints the version number.
 
 License
 -------

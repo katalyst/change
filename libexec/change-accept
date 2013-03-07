@@ -1,11 +1,7 @@
 #!/usr/bin/ruby
-# Usage: change update [<change>] [--skip-fetch] [--return-branch]
-# Summary: Pull & merge master into change branch.
-# Help: Pulls the lastest version of master and then merges it into the change
-# branch.
-#
-# If the <change> argument is not passed it is assumed the current change branch
-# is the one to be updated.
+# Usage: change accept [<change>] [--skip-fetch] [--return-branch]
+# Summary: Merge a change into the master branch.
+# Help: Merge a branch into master.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
@@ -31,9 +27,8 @@ begin
   if name.to_s.strip.empty?
     if current_branch.start_with?("change/")
       change_branch = current_branch
-      name = name_from_branch(change_branch)
     else
-      raise ArgumentError.new("You must either be on the change branch or pass the name of the change to publish:\n  change start <name>")
+      raise ArgumentError.new("You must either be on the change branch or pass the name of the change to accept:\n  change accept <name>")
     end
   else
     change_branch = "change/#{name}"
@@ -51,22 +46,31 @@ begin
 
   # Checkout & pull the MASTER branch.
 
-  run_or_raise("git checkout master")
+  unless on_branch("master")
+    run_or_raise("git checkout master")
+  end
   run_or_raise("git merge origin/master")
 
   # Checkout & pull the CHANGE branch.
 
-  unless on_branch(change_branch)
-    run_or_raise("git checkout #{change_branch}")
-  end
+  run_or_raise("git checkout #{change_branch}")
 
   if has_branch("remotes/origin/#{change_branch}")
     run_or_raise("git merge origin/#{change_branch}")
   end
 
-  # Merge the branch into the CHANGE branch.
+  # Merge the MASTER branch into the CHANGE branch.
 
   run_or_raise("git merge master")
+
+  # Merge the CHANGE branch into the MASTER branch.
+
+  run_or_raise("git checkout master")
+  run_or_raise("git merge #{change_branch}")
+
+  # Push the MASTER branch.
+
+  run_or_raise("git push")
 
   # Finish.
 
@@ -75,7 +79,8 @@ begin
   else
     run_or_raise("git checkout #{initial_branch}")
   end
-  put_success("Your change has been successfully updated.")
+
+  put_success("The change has been merged into master.")
 
 rescue Exception => error
 

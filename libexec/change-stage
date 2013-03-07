@@ -1,14 +1,28 @@
 #!/usr/bin/ruby
+# Usage: change stage [<change>] [--skip-fetch] [--return-branch]
+# Summary: Merge a change into the staging branch & push it.
+# Help: Add a change to the staging branch and push it to the remote. If the
+# staging branch doesn't exist it will be automatically created.
+#
+# If the <change> argument is not passed it is assumed the current change branch
+# is the one to be staged.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
+complete = ARGV.delete("--complete")
 skip_fetch = ARGV.delete("--skip-fetch")
 return_branch = extract_string_option(ARGV, "--return-branch")
 # arguments
 name = ARGV.shift
 # observations
 initial_branch = current_branch
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
 
 begin
 

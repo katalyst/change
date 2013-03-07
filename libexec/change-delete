@@ -1,8 +1,19 @@
 #!/usr/bin/ruby
+# Usage: change delete [<change>] [-f] [--skip-fetch] [--return-branch]
+# Summary: Delete a change locally & on the remote.
+# Help: Attempt to delete the change branch both locally & on the remote, but
+# only go through with it if the branch has been merged into master.
+#
+# You can use the -f option to force the delete regardless of change branch's
+# merge state.
+#
+# If the <change> argument is not passed it is assumed the current change branch
+# is the one to be deleted.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
+complete = ARGV.delete("--complete")
 force = ARGV.delete("-f")
 skip_fetch = ARGV.delete("--skip-fetch")
 return_branch = extract_string_option(ARGV, "--return-branch")
@@ -10,6 +21,12 @@ return_branch = extract_string_option(ARGV, "--return-branch")
 name = ARGV.shift
 # observations
 initial_branch = current_branch
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
 
 begin
 

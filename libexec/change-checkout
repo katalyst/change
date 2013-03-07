@@ -1,11 +1,21 @@
 #!/usr/bin/ruby
+# Usage: change checkout <change> [--fetch]
+# Summary: Checkout a change branch.
+# Help: Checkout a change branch.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
-skip_fetch = ARGV.delete("--skip-fetch")
+complete = ARGV.delete("--complete")
+fetch = ARGV.delete("--fetch")
 # arguments
 name = ARGV.shift
+
+# Provide change completions
+if complete
+  puts `change list`
+  exit
+end
 
 begin
 
@@ -23,7 +33,7 @@ begin
 
   # Fetch.
 
-  unless skip_fetch
+  if fetch
     run_or_raise("git fetch -p")
   end
 
