@@ -3,7 +3,7 @@
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
-skip_fetch = ARGV.delete("--skip-fetch")
+fetch = ARGV.delete("--fetch")
 # arguments
 name = ARGV.shift
 
@@ -23,7 +23,7 @@ begin
 
   # Fetch.
 
-  unless skip_fetch
+  if fetch
     run_or_raise("git fetch -p")
   end
 
