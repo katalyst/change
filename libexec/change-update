@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 # Usage: change update [<change>] [--skip-fetch] [--return-branch]
-# Summary: Merge master into change branch.
+# Summary: Pull & merge master into change branch.
 # Help: Pulls the lastest version of master and then merges it into the change
 # branch.
 #
