@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Usage: change checkout <change> [--skip-fetch]
+# Usage: change checkout <change> [--fetch]
 # Summary: Checkout & pull a change.
 # Help: Checkout a change branch and do a pull.
 
