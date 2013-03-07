@@ -1,4 +1,14 @@
 #!/usr/bin/ruby
+# Usage: change ds [-f] [--skip-fetch] [--return-branch]
+# Summary: Delete the staging branch.
+# Help: Delete the staging branch locally & on the remote.
+#
+# Sometimes the staging branch will end up with commits that you don't want
+# staged (abandonded features for example). When this happens you can delete the
+# staging branch ready for a new one to be created.
+#
+# Most of the time you'll need to use the -f option to force the branch to be
+# deleted.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
