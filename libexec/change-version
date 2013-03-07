@@ -1,3 +1,5 @@
 #!/usr/bin/ruby
+# Usage: change version
+# Summary: Display the version number.
 
 puts File.read(File.join(File.dirname(__FILE__), "../VERSION"))
