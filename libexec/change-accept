@@ -1,4 +1,7 @@
 #!/usr/bin/ruby
+# Usage: change accept [<change>] [--skip-fetch] [--return-branch]
+# Summary: Merge a change into the master branch.
+# Help: Merge a branch into master.
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
