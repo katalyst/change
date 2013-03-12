@@ -34,6 +34,17 @@ brew tap ketchup/brewhouse
 brew install change
 ```
 
+Tab Completion
+--------------
+
+To make tab completions to work you'll need Homebrew's bash completion in you `.bash_profile`:
+
+```bash
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
+```
+
 Workflow
 --------
 
