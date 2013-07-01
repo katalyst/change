@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Usage: change start [<change>] [--skip-fetch]
+# Usage: change start [<change>] [--skip-fetch] [-p <prefix>]
 # Summary: Create a new change branch.
 # Help: Pull the lastest version of master and then create a new change branch
 # off that.
@@ -8,6 +8,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 # options
 skip_fetch = ARGV.delete("--skip-fetch")
+prefix = extract_string_option(ARGV, "-p") || "change"
 # arguments
 name = ARGV.shift
 
@@ -18,7 +19,7 @@ begin
   if name.to_s.strip.empty?
     raise ArgumentError.new("You must pass the name of the change to start:\n  change start <name>")
   else
-    change_branch = "change/#{name}"
+    change_branch = "#{prefix}/#{name}"
   end
 
   unless head_is_clean
