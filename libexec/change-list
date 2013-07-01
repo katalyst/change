@@ -8,13 +8,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
 begin
 
-  all = `git branch -a --no-color`.lines.select do |branch|
-    branch =~ %r{^[\*\s]*(remotes/origin/)?change/.*?\s*$}
-  end.collect do |branch|
-    branch[%r{^[\*\s]*(remotes/origin/)?change/(.*?)\s*$}, 2]
-  end.uniq.sort
-
-  puts all
+  puts all_change_names
 
 rescue Exception => error
 
