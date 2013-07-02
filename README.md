@@ -1,76 +1,43 @@
 Change
 ======
 
-Change is a tool for managing your git workflow. It has been designed work with GitHub's pull
-request system allowing changes to be staged and reviewed before being merged into the main
-codebase.
+Change is a tool for managing your Git workflow. Change expects three types of
+branches in your repositories:
 
+ 1. **change** branches where changes get committed;
+ 1. **collection** branches where changes get merged together for testing; and,
+ 1. a **master** branch with the latest, stable code.
 
-Change enforces a git branch structure like so:
+The branches of a repository maintained with Change might look like this:
 
-```bash
-change/abc # work in progress
-change/zyx # more work in progress
-master # 100% tested and ready to go live
-staging # testing for work in progress
+```
+bug/new-page-error                # change
+change/footer-resize              # change
+experimental/advanced-navigation  # change
+feature/style-improvements        # change
+hotfix/login-redirect             # change
+master                            # master
+staging                           # collection
+v1.0.0                            # collection
 ```
 
-Change expects you to abide by these rules:
+There are two important rules that are the onus of the user to adhere to:
 
-- _NEVER_ commit to the **master** branch.
-- _NEVER_ commit to the **staging** branch _EXCEPT_ to resolve merge conflicts.
-- _NEVER_ merge the the **staging** branch into another branch.
-- Every change _MUST_ be done on a **change/*** branch.
-- Every change _MUST_ be merged into the **master** branch via a GitHub pull request.
-- Every change _MUST_ be staged & reviewed before being merged into the **master** branch.
+- A change branches MUST NOT be deleted until they have been merged into the
+  master branch (unless they have been abandoned).
+- Commits MUST NOT be made directly to a collection branch (except to resolve
+  merge conflicts).
 
 Installing
 ----------
 
-Install with [Homebrew](http://mxcl.github.com/homebrew/) via the `ketchup/brewhouse` tap:
+Install with [Homebrew](http://mxcl.github.com/homebrew/) via the
+`ketchup/brewhouse` tap:
 
 ```
 brew tap ketchup/brewhouse
 brew install change
 ```
-
-Workflow
---------
-
-1.  Start a change (called "fix-typos" in this example).
-
-    ```bash
-    $ change start fix-typos
-    ```
-
-2.  Do some work and commit it to the change branch.
-
-    ```bash
-    $ touch example
-    $ git add example
-    $ git commit -m "example commit"
-    ```
-
-3.  Add the change to the staging branch & deploy it to the staging server.
-
-    ```bash
-    $ change stage fix-typos
-    # deploy the staging branch to the staging server
-    ```
-
-4.  Open a pull request and repeat steps 2 & 3 until the pull request has been approved.
-
-    ```bash
-    # open a pull request on github.com
-    ```
-
-5.  Merge the pull request into master, delete the change & deploy to production.
-
-    ```bash
-    # merge the pull request on github.com
-    $ change delete fix-typos
-    # deploy the master branch to the production server
-    ```
 
 Reference
 ---------
@@ -159,7 +126,7 @@ change stage [<change>] [--skip-fetch] [--return-branch <branch>]
 ```
 
 The `stage` command merges a change into the staging branch before pushing it to the remote. If the
-change hasn't been pushed to the remote, it is added in the porcess. If the staging branch doesn't
+change hasn't been pushed to the remote, it is added in the process. If the staging branch doesn't
 yet exist it is created in the process.
 
 #### Start
@@ -189,9 +156,9 @@ The `version` command prints the version number.
 License
 -------
 
-Copyright (c) 2012 Katalyst Interactive.
+Copyright (c) 2012-2013 Katalyst Interactive, Haydn Ewers.
 
-See the LICENSE file for details.
+This project is released under the MIT License, see LICENSE for details.
 
 Acknowledgments
 ---------------
