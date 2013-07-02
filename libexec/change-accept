@@ -9,6 +9,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 complete = ARGV.delete("--complete")
 skip_fetch = ARGV.delete("--skip-fetch")
 return_branch = extract_string_option(ARGV, "--return-branch")
+prefix = extract_string_option(ARGV, "-p") || "change"
 # arguments
 name = ARGV.shift
 # observations
@@ -25,13 +26,13 @@ begin
   # Preflight.
 
   if name.to_s.strip.empty?
-    if current_branch.start_with?("change/")
+    if is_change_branch?(current_branch)
       change_branch = current_branch
     else
       raise ArgumentError.new("You must either be on the change branch or pass the name of the change to accept:\n  change accept <name>")
     end
   else
-    change_branch = "change/#{name}"
+    change_branch = "#{prefix}/#{name}"
   end
 
   unless head_is_clean
