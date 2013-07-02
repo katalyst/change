@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Usage: change accept [<change>] [--skip-fetch] [--return-branch]
+# Usage: change accept [<change>] [--skip-fetch] [--return-branch] [-p <prefix>]
 # Summary: Merge a change into the master branch.
 # Help: Merge a branch into master.
 
@@ -17,7 +17,7 @@ initial_branch = current_branch
 
 # Provide change completions
 if complete
-  puts `change list`
+  puts `change list -p #{prefix}`
   exit
 end
 

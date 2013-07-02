@@ -1,14 +1,21 @@
 #!/usr/bin/ruby
-# Usage: change list
+# Usage: change list [-p <prefix>]
 # Summary: List all the changes (local & on the remote).
 # Help: Displays a list of all the changes avalible by looking at all the local
 # and remote branches prefixed with "change/".
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
+# options
+prefix = extract_string_option(ARGV, "-p")
+
 begin
 
-  puts all_change_names
+  if prefix
+    puts all_change_names.select { |c| c.start_with?("#{prefix}/") }
+  else
+    puts all_change_names
+  end
 
 rescue Exception => error
 
