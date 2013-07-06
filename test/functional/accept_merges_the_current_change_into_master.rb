@@ -1,5 +1,7 @@
-common_setup("user_a")
+require_relative "support/helpers"
 
+setup("origin", "user_a")
+change_repo("user_a")
 quiet_system("change start foo")
 create_and_commit("abc")
 quiet_system("change accept")

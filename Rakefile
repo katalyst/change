@@ -1,5 +1,4 @@
 require "tmpdir"
-require_relative "test/functional"
 
 namespace :test do
 
@@ -8,7 +7,7 @@ namespace :test do
 
     system("alias change='bin/change'")
 
-    Dir["test/functional/*"].each do |test|
+    Dir["test/functional/*.rb"].each do |test|
 
       puts test
 
@@ -26,9 +25,13 @@ namespace :test do
 
         rescue Exception => error
 
-          system("tput setaf 1")
-          puts "ERROR: #{error}"
-          system("tput sgr0")
+          if Rake.application.options.trace == true
+            raise error
+          else
+            system("tput setaf 1")
+            puts "ERROR: #{error}"
+            system("tput sgr0")
+          end
 
         end
 

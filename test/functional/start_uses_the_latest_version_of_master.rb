@@ -1,5 +1,6 @@
-common_setup("user_a", "user_b")
+require_relative "support/helpers"
 
+setup("origin", [ "user_a", "user_b" ])
 change_repo("user_b")
 create_and_commit("foo")
 push_branch("origin", "master")

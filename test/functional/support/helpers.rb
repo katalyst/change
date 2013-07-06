@@ -1,5 +1,13 @@
+def verbose?
+  (verbose == true) || ARGV.include?("--verbose") || ARGV.include?("-v")
+end
+
 def quiet_system(command)
-  system("#{command} > /dev/null 2>&1")
+  if verbose?
+    system(command)
+  else
+    system("#{command} > /dev/null 2>&1")
+  end
 end
 
 def change_repo(name)
@@ -39,22 +47,30 @@ def add_remote(remote)
 end
 
 def push_branch(remote, branch)
-  quiet_system("git push #{remote} #{branch}")
+  quiet_system("git pull #{remote} #{branch}")
+  quiet_system("git push -u #{remote} #{branch}")
 end
 
-def setup
+def setup(remotes=[], locals=[])
+
+  return setup([remotes], locals) unless remotes.is_a?(Array)
+  return setup(remotes, [locals]) unless locals.is_a?(Array)
+
   @root_dir = Dir.pwd
-end
 
-def common_setup(name_a, name_b=nil)
-  setup
-  create_bare_repo("origin")
-  create_repo(name_a)
-  create_and_commit("README")
-  add_remote("origin")
-  push_branch("origin", "master")
-  if name_b
-    clone_repo("origin", name_b)
-    change_repo(name_a)
+  remotes.each do |remote|
+    create_bare_repo(remote)
   end
+
+  locals.each do |local|
+    create_repo(local)
+    create_and_commit(local)
+    remotes.each do |remote|
+      add_remote(remote)
+      push_branch(remote, "master")
+    end
+  end
+
+  Dir.chdir(@root_dir)
+
 end
