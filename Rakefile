@@ -1,13 +1,20 @@
 require "tmpdir"
 
+desc "Setup the environment."
+task :environment do
+  ENV["PROJECT_ROOT"] = File.dirname(__FILE__)
+  ENV["PATH"] = [
+    File.join(ENV["PROJECT_ROOT"], "bin"),
+    ENV["PATH"]
+  ].join(":")
+end
+
 namespace :test do
 
-  desc "Run the functional tests."
-  task :functional do
+  desc "Run the feature tests."
+  task :features => :environment do
 
-    system("alias change='bin/change'")
-
-    Dir["test/functional/*.rb"].each do |test|
+    Dir["test/features/*.rb"].each do |test|
 
       puts test
 
@@ -15,7 +22,9 @@ namespace :test do
 
         begin
 
-          Dir.chdir(dir)
+          ENV["TEST_DIR"] = dir
+
+          Dir.chdir(ENV["TEST_DIR"])
 
           require_relative test
 
@@ -43,4 +52,4 @@ namespace :test do
 
 end
 
-task :default => "test:functional"
+task :default => "test:features"

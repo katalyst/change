@@ -2,35 +2,38 @@ def verbose?
   (verbose == true) || ARGV.include?("--verbose") || ARGV.include?("-v")
 end
 
-def quiet_system(command)
+def run(command)
   if verbose?
-    system(command)
+    `command`
   else
-    system("#{command} > /dev/null 2>&1")
+    `#{command} > /dev/null 2>&1`
   end
 end
 
+alias quiet_system run
+
 def change_repo(name)
-  Dir.chdir(File.join(@root_dir, name))
+  Dir.chdir(File.join(ENV["TEST_DIR"], name))
 end
 
-def create_repo(name)
-  path = File.join(@root_dir, name)
+def create_repo(name, options={})
+  path = File.join(ENV["TEST_DIR"], name)
   Dir.mkdir(path)
   Dir.chdir(path)
-  quiet_system("git init")
+  if options[:bare]
+    run("git init --bare")
+  else
+    run("git init")
+  end
 end
 
 def create_bare_repo(name)
-  path = File.join(@root_dir, name)
-  Dir.mkdir(path)
-  Dir.chdir(path)
-  quiet_system("git init --bare")
+  create_repo(name, :bare => true)
 end
 
 def clone_repo(remote, name)
-  repo_path = File.join(@root_dir, name)
-  remote_path = File.join(@root_dir, remote)
+  repo_path = File.join(ENV["TEST_DIR"], name)
+  remote_path = File.join(ENV["TEST_DIR"], remote)
   quiet_system("git clone #{remote_path} #{repo_path}")
   Dir.chdir(repo_path)
 end
@@ -42,7 +45,7 @@ def create_and_commit(file)
 end
 
 def add_remote(remote)
-  path = File.join(@root_dir, remote)
+  path = File.join(ENV["TEST_DIR"], remote)
   system "git remote add #{remote} #{path}"
 end
 
@@ -56,7 +59,7 @@ def setup(remotes=[], locals=[])
   return setup([remotes], locals) unless remotes.is_a?(Array)
   return setup(remotes, [locals]) unless locals.is_a?(Array)
 
-  @root_dir = Dir.pwd
+  ENV["TEST_DIR"] ||= Dir.pwd
 
   remotes.each do |remote|
     create_bare_repo(remote)
@@ -71,6 +74,6 @@ def setup(remotes=[], locals=[])
     end
   end
 
-  Dir.chdir(@root_dir)
+  Dir.chdir(ENV["TEST_DIR"])
 
 end
