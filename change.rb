@@ -4,7 +4,7 @@ class Change < Formula
 
   homepage 'https://github.com/katalyst/change'
   url 'https://github.com/katalyst/change/zipball/v1.3.0'
-  sha1 '3212677aeb50293da04656ec37108164a2e2a549'
+  sha1 'cd14f8688f07f7089929f3c1d48a27035485f295'
 
   def test
     system "change"
