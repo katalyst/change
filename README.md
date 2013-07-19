@@ -34,6 +34,9 @@ brew tap ketchup/brewhouse
 brew install change
 ```
 
+If you've got Homebrew's `bash-completions` or `zsh-completions` installed
+you'll get tab completion out-of-the-box.
+
 Workflow
 --------
 
