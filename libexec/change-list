@@ -1,20 +1,21 @@
 #!/usr/bin/ruby
-# Usage: change list
+# Usage: change list [-p <prefix>]
 # Summary: List all the changes (local & on the remote).
 # Help: Displays a list of all the changes avalible by looking at all the local
 # and remote branches prefixed with "change/".
 
 require File.join(File.dirname(__FILE__), "../share/change/helpers")
 
+# options
+prefix = extract_string_option(ARGV, "-p")
+
 begin
 
-  all = `git branch -a --no-color`.lines.select do |branch|
-    branch =~ %r{^[\*\s]*(remotes/origin/)?change/.*?\s*$}
-  end.collect do |branch|
-    branch[%r{^[\*\s]*(remotes/origin/)?change/(.*?)\s*$}, 2]
-  end.uniq.sort
-
-  puts all
+  if prefix
+    puts all_change_names.select { |c| c.start_with?("#{prefix}/") }
+  else
+    puts all_change_names
+  end
 
 rescue Exception => error
 
