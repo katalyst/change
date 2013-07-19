@@ -111,4 +111,4 @@ def change_name(branch)
   branch[%r{^(.+?/)(.+)$}, 2]
 end
 
-alias name_from_branch change_name
+alias change_name_from_branch change_name
