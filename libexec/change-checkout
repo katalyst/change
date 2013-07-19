@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Usage: change checkout <change> [--fetch]
+# Usage: change checkout <change> [--fetch] [-p <prefix>]
 # Summary: Checkout a change branch.
 # Help: Checkout a change branch.
 
@@ -8,12 +8,13 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 # options
 complete = ARGV.delete("--complete")
 fetch = ARGV.delete("--fetch")
+prefix = extract_string_option(ARGV, "-p") || "change"
 # arguments
 name = ARGV.shift
 
 # Provide change completions
 if complete
-  puts `change list`
+  puts `change list -p #{prefix}`
   exit
 end
 
@@ -24,7 +25,7 @@ begin
   if name.to_s.strip.empty?
     raise ArgumentError.new("You must pass the name of the change to checkout:\n  change checkout <name>")
   else
-    change_branch = "change/#{name}"
+    change_branch = "#{prefix}/#{name}"
   end
 
   unless head_is_clean

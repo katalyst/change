@@ -1,8 +1,12 @@
+# errors
+
 class DirtyHeadError < StandardError
   def initialize(message=nil)
     super(message || "HEAD is dirty. Stash your changes and try again.")
   end
 end
+
+# core
 
 def run_or_raise(command, error=nil)
 
@@ -46,24 +50,65 @@ def put_success(message)
   system("tput sgr0")
 end
 
-def head_is_clean
+# git
+
+def head_is_clean?
   `git status --porcelain`.strip.empty?
 end
 
-def on_branch(branch)
-  `git branch --no-color` =~ /^\s*\*\s*#{Regexp.escape(branch)}\s*$/
+alias head_is_clean head_is_clean?
+
+def on_branch?(branch)
+  current_branch == branch
 end
 
-def has_branch(branch)
-  `git branch -a --no-color` =~ /^[\*\s]*#{Regexp.escape(branch)}\s*$/
+alias on_branch on_branch?
+
+def has_branch?(branch)
+  all_branches.include?(branch)
 end
+
+alias has_branch has_branch?
 
 def current_branch
-  `git branch --no-color`.match(/^\s*\*\s*(.+)\s*$/)[1].strip
+  `git rev-parse --abbrev-ref HEAD`.strip
 end
 
-def name_from_branch(branch)
-  b = branch.dup
-  b.slice!(/^change\//)
-  b
+def all_branches
+  branches = []
+  branches << `git branch --no-color`.lines.collect do |branch|
+    branch[%r{^([\*\s]*)(.*)(\s*)$}, 2]
+  end
+  branches << `git branch --remote --no-color`.lines.collect do |branch|
+    branch[%r{^([\*\s]*)(.+?/)(.*)(\s*)$}, 3]
+  end
+  branches.flatten.uniq.sort
 end
+
+# change
+
+def is_change_branch?(branch)
+  all_change_branches.include?(branch)
+end
+
+def all_change_branches
+  all_branches.select { |b| !!b["/"] }
+end
+
+def all_change_names
+  all_change_branches.collect do |branch|
+    change_name_from_branch(branch)
+  end
+end
+
+def change_branches_named(name)
+  all_change_branches.select do |branch|
+    branch[%r{^(.+?/)(.+)$}, 2] == name
+  end
+end
+
+def change_name(branch)
+  branch[%r{^(.+?/)(.+)$}, 2]
+end
+
+alias name_from_branch change_name

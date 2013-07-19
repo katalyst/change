@@ -13,6 +13,7 @@ require File.join(File.dirname(__FILE__), "../share/change/helpers")
 complete = ARGV.delete("--complete")
 skip_fetch = ARGV.delete("--skip-fetch")
 return_branch = extract_string_option(ARGV, "--return-branch")
+prefix = extract_string_option(ARGV, "-p") || "change"
 # arguments
 name = ARGV.shift
 # observations
@@ -20,7 +21,7 @@ initial_branch = current_branch
 
 # Provide change completions
 if complete
-  puts `change list`
+  puts `change list -p #{prefix}`
   exit
 end
 
@@ -29,14 +30,14 @@ begin
   # Preflight.
 
   if name.to_s.strip.empty?
-    if current_branch.start_with?("change/")
+    if is_change_branch?(current_branch)
       change_branch = current_branch
       name = name_from_branch(change_branch)
     else
       raise ArgumentError.new("You must either be on the change branch or pass the name of the change to publish:\n  change start <name>")
     end
   else
-    change_branch = "change/#{name}"
+    change_branch = "#{prefix}/#{name}"
   end
 
   unless head_is_clean
@@ -49,7 +50,7 @@ begin
     run_or_raise("git fetch -p")
   end
 
-  run_or_raise("change publish #{name} --skip-fetch")
+  run_or_raise("change publish #{name} -p #{prefix} --skip-fetch")
 
   # # Checkout & pull the CHANGE branch.
   #
